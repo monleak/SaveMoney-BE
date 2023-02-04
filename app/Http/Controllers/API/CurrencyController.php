@@ -1,10 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Filters\CurrenciesFilter;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCurrencyRequest;
 use App\Http\Requests\UpdateCurrencyRequest;
+use App\Http\Resources\CurrencyCollection;
+use App\Http\Resources\CurrencyResource;
 use App\Models\Currency;
+use Illuminate\Http\Request;
 
 class CurrencyController extends Controller
 {
@@ -13,9 +18,15 @@ class CurrencyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $filter = new CurrenciesFilter();
+        $queryItems = $filter->transform($request);
+        if(count($queryItems) == 0){
+            return new CurrencyCollection(Currency::paginate());
+        }else{
+            return new CurrencyCollection(Currency::where($queryItems)->paginate());
+        }
     }
 
     /**
@@ -47,7 +58,7 @@ class CurrencyController extends Controller
      */
     public function show(Currency $currency)
     {
-        //
+        return new CurrencyResource($currency);
     }
 
     /**

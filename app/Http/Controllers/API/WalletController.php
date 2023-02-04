@@ -1,10 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Filters\WalletsFilter;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreWalletRequest;
 use App\Http\Requests\UpdateWalletRequest;
+use App\Http\Resources\WalletCollection;
+use App\Http\Resources\WalletResource;
 use App\Models\Wallet;
+use Illuminate\Http\Request;
 
 class WalletController extends Controller
 {
@@ -13,9 +18,15 @@ class WalletController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $filter = new WalletsFilter();
+        $queryItems = $filter->transform($request);
+        if(count($queryItems) == 0){
+            return new WalletCollection(Wallet::paginate());
+        }else{
+            return new WalletCollection(Wallet::where($queryItems)->paginate());
+        }
     }
 
     /**
@@ -47,7 +58,7 @@ class WalletController extends Controller
      */
     public function show(Wallet $wallet)
     {
-        //
+        return new WalletResource($wallet);
     }
 
     /**

@@ -1,10 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Filters\TipsFilter;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTipRequest;
 use App\Http\Requests\UpdateTipRequest;
+use App\Http\Resources\TipCollection;
+use App\Http\Resources\TipResource;
 use App\Models\Tip;
+use Illuminate\Http\Request;
 
 class TipController extends Controller
 {
@@ -13,9 +18,15 @@ class TipController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $filter = new TipsFilter();
+        $queryItems = $filter->transform($request);
+        if(count($queryItems) == 0){
+            return new TipCollection(Tip::paginate());
+        }else{
+            return new TipCollection(Tip::where($queryItems)->paginate());
+        }
     }
 
     /**
@@ -47,7 +58,7 @@ class TipController extends Controller
      */
     public function show(Tip $tip)
     {
-        //
+        return new TipResource($tip);
     }
 
     /**
