@@ -47,7 +47,7 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
+        return new CategoryResource(Category::create($request->all()));
     }
 
     /**
@@ -81,7 +81,7 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $category->update($request->all());
     }
 
     /**

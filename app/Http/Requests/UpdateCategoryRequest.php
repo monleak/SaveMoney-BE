@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCategoryRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class UpdateCategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +24,22 @@ class UpdateCategoryRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        $method = $this->method();
+
+        if ($method == 'PUT') {
+            return [
+                'user_id' => ['required', 'exists:App\Models\User,id'],
+                'privacy' => ['required', Rule::in(['PUBLIC','PRIVATE'])],
+                'type' => ['required', Rule::in(['DEBT' , 'LOAN', 'EXPENSE', 'INCOME'])],
+                'name' => ['required'],
+            ];
+        }else{
+            return [
+                'user_id' => ['sometimes','required', 'exists:App\Models\User,id'],
+                'privacy' => ['sometimes','required', Rule::in(['PUBLIC','PRIVATE'])],
+                'type' => ['sometimes','required', Rule::in(['DEBT' , 'LOAN', 'EXPENSE', 'INCOME'])],
+                'name' => ['sometimes','required'],
+            ];
+        }
     }
 }

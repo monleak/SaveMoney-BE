@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreCategoryRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class StoreCategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,10 @@ class StoreCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'user_id' => ['required', 'exists:App\Models\User,id'],
+            'privacy' => ['required', Rule::in(['PUBLIC','PRIVATE'])],
+            'type' => ['required', Rule::in(['DEBT' , 'LOAN', 'EXPENSE', 'INCOME'])],
+            'name' => ['required'],
         ];
     }
 }

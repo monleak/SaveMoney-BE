@@ -13,7 +13,7 @@ class UpdateTipRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,20 @@ class UpdateTipRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        $method = $this->method();
+
+        if ($method == 'PUT') {
+            return [
+                'title' => ['required'],
+                'description' => ['required'],
+                'content' => ['required'],
+            ];
+        }else{
+            return [
+                'title' => ['sometimes','required'],
+                'description' => ['sometimes','required'],
+                'content' => ['sometimes','required'],
+            ];
+        }
     }
 }

@@ -13,7 +13,7 @@ class UpdateTransactionRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,22 @@ class UpdateTransactionRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        $method = $this->method();
+
+        if ($method == 'PUT') {
+            return [
+                'wallet_id'=>['required','exists:App\Models\Wallet,id'],
+                'category_id'=>['required','exists:App\Models\Category,id'],
+                'name'=>['required'],
+                'value'=>['required','numeric']
+            ];
+        }else{
+            return [
+                'wallet_id'=>['sometimes','required','exists:App\Models\Wallet,id'],
+                'category_id'=>['sometimes','required','exists:App\Models\Category,id'],
+                'name'=>['sometimes','required'],
+                'value'=>['sometimes','required','numeric']
+            ];
+        }
     }
 }

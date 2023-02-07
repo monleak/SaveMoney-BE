@@ -47,7 +47,7 @@ class TransactionController extends Controller
      */
     public function store(StoreTransactionRequest $request)
     {
-        //
+        return new TransactionResource(Transaction::create($request->all()));
     }
 
     /**
@@ -81,7 +81,7 @@ class TransactionController extends Controller
      */
     public function update(UpdateTransactionRequest $request, Transaction $transaction)
     {
-        //
+        $transaction->update($request->all());
     }
 
     /**

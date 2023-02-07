@@ -47,7 +47,7 @@ class WalletController extends Controller
      */
     public function store(StoreWalletRequest $request)
     {
-        //
+        return new WalletResource(Wallet::create($request->all()));
     }
 
     /**
@@ -81,7 +81,7 @@ class WalletController extends Controller
      */
     public function update(UpdateWalletRequest $request, Wallet $wallet)
     {
-        //
+        $wallet->update($request->all());
     }
 
     /**

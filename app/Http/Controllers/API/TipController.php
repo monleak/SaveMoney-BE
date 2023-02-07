@@ -47,7 +47,7 @@ class TipController extends Controller
      */
     public function store(StoreTipRequest $request)
     {
-        //
+        return new TipResource(Tip::create($request->all()));
     }
 
     /**
@@ -81,7 +81,7 @@ class TipController extends Controller
      */
     public function update(UpdateTipRequest $request, Tip $tip)
     {
-        //
+        $tip->update($request->all());
     }
 
     /**

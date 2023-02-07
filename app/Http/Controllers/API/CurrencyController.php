@@ -47,7 +47,7 @@ class CurrencyController extends Controller
      */
     public function store(StoreCurrencyRequest $request)
     {
-        //
+        return new CurrencyResource(Currency::create($request->all()));
     }
 
     /**
@@ -81,7 +81,7 @@ class CurrencyController extends Controller
      */
     public function update(UpdateCurrencyRequest $request, Currency $currency)
     {
-        //
+        $currency->update($request->all());
     }
 
     /**

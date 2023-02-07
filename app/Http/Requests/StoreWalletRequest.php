@@ -13,7 +13,7 @@ class StoreWalletRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,10 @@ class StoreWalletRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required'],
+            'currency_id'=>['required','exists:App\Models\Currency,id'],
+            'user_id'=>['required','exists:App\Models\User,id'],
+            'balance'=>['required','numeric'],
         ];
     }
 }
